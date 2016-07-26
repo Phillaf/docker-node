@@ -1,0 +1,17 @@
+version: '2'
+services:
+
+  frontend:
+    build: images/node
+    volumes:
+      - ./:/usr/src/app
+    working_dir: /usr/src/app
+    entrypoint: forever index.js
+    environment:
+      VIRTUAL_HOST: frontend
+      VIRTUAL_PORT: 80
+  
+networks:
+  default:
+    external:
+      name: myapp
