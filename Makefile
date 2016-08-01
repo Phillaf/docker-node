@@ -1,6 +1,10 @@
 .SILENT:
 .PHONY:
 
+ifndef ARGS
+ARGS = $(filter-out $@,$(MAKECMDGOALS))
+endif
+
 %:
 	@:
 
@@ -8,14 +12,11 @@
 # Inherited
 #
 
-echo:
-	@echo frontend $(ARGS)
-
 update:
 	docker-compose down
-	git pull
 	docker-compose pull
 	docker-compose build
+	docker run -it --rm -v $$(pwd):/usr/src/app -w /usr/src/app node npm update
 
 up:
 	docker-compose up -d
@@ -26,3 +27,5 @@ down:
 #
 # Tools
 #
+npm:
+	docker run -it --rm -v $$(pwd):/usr/src/app -w /usr/src/app node npm $(ARGS)
